@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#333">
+
+
+  <ImageView
+      android:layout_alignParentLeft="true"
+      android:layout_width="60dp"
+      android:layout_height="60dp"
+      android:id="@+id/imgAppIc"
+      android:src="@drawable/mix" />
+
+
+
+  <TextView
+      android:layout_toRightOf="@id/imgAppIc"
+      android:singleLine="true"
+      android:id="@+id/name"
+      android:ellipsize="marquee"
+      android:layout_marginLeft="7dp"
+      android:layout_marginTop="15dp"
+      android:marqueeRepeatLimit ="marquee_forever"
+      android:focusable="true"
+      android:focusableInTouchMode="true"
+      android:scrollHorizontally="true"
+      android:layout_width="170dp"
+      android:layout_height="wrap_content"
+      android:textColor="#FFF"
+      android:text="Radio" />
+
+  <ImageButton
+      android:layout_width="30dp"
+      android:layout_height="30dp"
+      android:id="@+id/stop"
+      android:layout_alignTop="@+id/name"
+      android:layout_alignParentEnd="true"
+      android:src="@drawable/ic_stop_24dp"
+      android:background="@null"
+      android:layout_marginRight="10dp" />
+
+  <TextView
+      android:singleLine="true"
+      android:id="@+id/textView3"
+      android:ellipsize="marquee"
+      android:layout_marginLeft="7dp"
+      android:marqueeRepeatLimit="marquee_forever"
+      android:focusable="true"
+      android:focusableInTouchMode="true"
+      android:scrollHorizontally="true"
+      android:layout_width="170dp"
+      android:layout_height="wrap_content"
+      android:textColor="#FFF"
+      android:text="Reproduciendo"
+      android:layout_below="@+id/name"
+      android:layout_toEndOf="@+id/imgAppIc"
+      android:textSize="10dp" />
+
+
+</RelativeLayout>

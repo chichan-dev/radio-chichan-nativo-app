@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/main_area"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/drawing_view_container"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#000">
+
+            <ImageView
+                android:id="@+id/gpuimage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center" />
+
+            <ImageView
+                android:id="@+id/watermark"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_alignBottom="@+id/bottomText"
+                android:scaleType="fitStart" />
+
+
+
+            <!--Meme text-->
+            <com.emdiem.mix.Utils.MemeTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/topText"
+                app:strokeColor="#000"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:textSize="40dp"
+                android:singleLine="true"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp" />
+
+            <com.emdiem.mix.Utils.MemeTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/bottomText"
+                android:layout_alignBottom="@+id/gpuimage"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="32dp"
+                android:textSize="40dp"
+                android:text=""
+                android:singleLine="true"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp" />
+            <!--Meme text end-->
+
+
+            <!--Helve text-->
+            <com.emdiem.mix.Utils.HelveticaTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/topHelveText"
+                app:strokeColor="#000"
+                android:layout_alignParentTop="false"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentStart="false"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:textSize="40dp"
+                android:singleLine="true"
+                android:visibility="invisible"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp" />
+
+            <com.emdiem.mix.Utils.HelveticaTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/bottomHelveText"
+                android:layout_alignBottom="@+id/gpuimage"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="32dp"
+                android:textSize="40dp"
+                android:text=""
+                android:singleLine="true"
+                android:visibility="invisible"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp" />
+            <!--Helve text end-->
+
+
+
+
+            <!--Courier text-->
+            <com.emdiem.mix.Utils.CourierTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/topCourierText"
+                app:strokeColor="#000"
+                android:layout_alignParentTop="false"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentStart="false"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:textSize="40dp"
+                android:singleLine="true"
+                android:visibility="invisible"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp" />
+
+            <com.emdiem.mix.Utils.CourierTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/bottomCourierText"
+                android:layout_alignBottom="@+id/gpuimage"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="32dp"
+                android:textSize="40dp"
+                android:text=""
+                android:singleLine="true"
+                android:paddingEnd="5dp"
+                android:visibility="invisible"
+                android:paddingStart="5dp" />
+            <!--Courier text end-->
+
+
+            <!--Georgia text-->
+            <com.emdiem.mix.Utils.GeorgiaTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/topGeorgiaText"
+                app:strokeColor="#000"
+                android:layout_alignParentTop="false"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentStart="false"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:textSize="40dp"
+                android:singleLine="true"
+                android:visibility="invisible"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp" />
+
+            <com.emdiem.mix.Utils.GeorgiaTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/bottomGeorgiaText"
+                android:layout_alignBottom="@+id/gpuimage"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="32dp"
+                android:textSize="40dp"
+                android:text=""
+                android:singleLine="true"
+                android:paddingEnd="5dp"
+                android:visibility="invisible"
+                android:paddingStart="5dp" />
+            <!--Georgia text end-->
+
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/toolbar_area"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <it.sephiroth.android.library.widget.HListView
+                android:id="@+id/list_tools"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:background="@color/common_background"
+                android:gravity="center_vertical"
+                android:listSelector="@android:color/transparent"
+                android:overScrollMode="always"
+                app:hlv_dividerWidth="@dimen/margin_15px"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/shareButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="right"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ic_share"
+        android:background="@null"
+        android:scaleType="fitXY" />
+
+    <ImageButton
+        android:id="@+id/editText"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="60dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@mipmap/ic_text" />
+
+    <!--<LinearLayout
+        android:id="@+id/btn_area"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@color/blue"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/sticker_btn"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="贴纸"
+            android:textColor="@color/white"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/filter_btn"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="滤镜"
+            android:textColor="@color/white"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/text_btn"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="标签"
+            android:textColor="@color/white"
+            android:textSize="22sp" />
+    </LinearLayout>-->
+
+
+
+</RelativeLayout>

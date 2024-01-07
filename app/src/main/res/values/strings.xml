@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Play</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string-array name="co_doctypes">
+        <item>CC</item>
+        <item>TI</item>
+    </string-array>
+
+
+    <string-array name="pa_doctypes">
+        <item>CI</item>
+        <item>CJ</item>
+    </string-array>
+
+
+    <string-array name="cities">
+        <item>Barranquilla</item>
+        <item>Cali</item>
+        <item>Neiva</item>
+    </string-array>
+
+
+    <string name="tipo_doc">Tipo de documento</string>
+    <string name="age">Edad</string>
+    <string name="city">Ciudad</string>
+
+    <string name="sliding_transparent_view_description">Click to return to previous screen</string>
+
+</resources>

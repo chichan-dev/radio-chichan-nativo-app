@@ -1,0 +1,82 @@
+apply plugin: 'com.android.application'
+//apply plugin: 'me.tatarka.retrolambda'
+//
+//retrolambda {
+//    jdk '/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home'//System.getenv("JAVA_8")
+//    oldJdk System.getenv("JAVA8_HOME")
+//    javaVersion JavaVersion.VERSION_1_7
+//}
+
+android {
+    compileSdkVersion 33
+    namespace "com.github.skykai.stickercamera"
+
+    defaultConfig {
+        applicationId "com.emdiem.mix"
+        minSdkVersion 22
+        targetSdkVersion 33
+        versionCode 11
+        versionName "1.1.5"
+        multiDexEnabled = true
+        generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi']
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'armeabi-v7a'
+            universalApk true
+        }
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            ndk {
+                abiFilters "armeabi-v7a"
+            }
+        }
+    }
+
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
+}
+
+
+dependencies {
+    implementation 'pub.hanks:smallbang:1.2.2'
+    implementation files('libs/ffmpeg.jar')
+    implementation project(':ImageViewTouch')
+    implementation files('libs/javacv-0.9.1-20140828.121539-1.jar')
+    implementation files('libs/fastjson-1.2.5.jar')
+    implementation files('libs/javacpp.jar')
+    implementation files('libs/opencv.jar')
+    implementation files('libs/universal-image-loader-1.9.4.jar')
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'com.jakewharton:butterknife:8.6.0'
+    implementation 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+    implementation 'it.sephiroth.android.library.horizontallistview:hlistview:1.2.2'
+    implementation 'de.greenrobot:eventbus:2.4.0'
+    implementation 'com.otaliastudios:cameraview:2.4.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.parse:parse-android:1.13.0'
+    implementation 'com.github.satyan:sugar:1.5'
+    implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
+    implementation 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
+    implementation 'com.klinkerapps:sliding-activity:1.5.2'
+    implementation 'jp.wasabeef:recyclerview-animators:2.2.1'
+    implementation 'jp.wasabeef:picasso-transformations:2.0.0'
+    implementation 'fr.avianey.com.viewpagerindicator:library:2.4.1.1@aar'
+    implementation 'com.sprylab.android.texturevideoview:texturevideoview:1.1.1'
+    implementation 'com.google.android.exoplayer:exoplayer:2.8.3'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation project(path: ':Gpu-Image')
+}

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.cardview.widget.CardView android:layout_gravity="center" android:id="@id/card_view" android:layout_width="fill_parent" android:layout_height="250.0dip" android:layout_margin="10dp">
+        <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <RelativeLayout android:background="#ff000000" android:layout_width="fill_parent" android:layout_height="200.0dip">
+                <ImageView android:id="@id/cover" android:background="#ff000000" android:layout_width="fill_parent" android:layout_height="200.0dip" android:scaleType="centerCrop" android:alpha="0.5" />
+                <TextView android:textSize="25.0dip" android:textColor="#ffffffff" android:id="@id/titleText" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="25.0dip" android:layout_marginTop="55.0dip" android:text="El Arrecostao" android:singleLine="true" android:layout_centerHorizontal="true" />
+                <ImageView android:id="@+id/photo" android:layout_width="50.0dip" android:layout_height="50.0dip"
+                    android:layout_alignTop="@id/titleText"
+                    android:layout_alignRight="@id/titleText"
+                    android:layout_alignEnd="@id/titleText"
+                    android:layout_marginTop="5dp" />
+                <TextView android:textColor="#ffffffff" android:id="@+id/artist" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Baby Ralph" android:layout_below="@id/titleText" android:layout_alignLeft="@id/titleText" />
+                <SeekBar android:id="@+id/seekbar" android:layout_width="fill_parent" android:layout_height="20.0dip" android:layout_marginLeft="10.0dip" android:layout_marginRight="10.0dip" android:layout_marginBottom="45.0dip" android:progress="60" android:indeterminate="false" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true" />
+                <TextView android:textColor="#ffffffff" android:id="@+id/textView" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_above="@id/seekbar" android:layout_alignLeft="@id/seekbar" />
+                <TextView android:textColor="#ffffffff" android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_above="@id/seekbar" android:layout_alignRight="@id/seekbar" />
+
+
+                <FrameLayout
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:elevation="2dp"
+                    android:background="#ff1366b8">
+
+                    <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/imageView"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_musica" />
+                </FrameLayout>
+
+                <ImageButton
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_play_arrow_24dp"
+                    android:id="@+id/playPause"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@null"
+                    android:scaleType="fitXY" />
+
+            </RelativeLayout>
+            <LinearLayout android:orientation="horizontal" android:id="@id/heartContainer" android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+                <LinearLayout android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="0.01" />
+                <LinearLayout android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="0.8" >
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/thumbsDown"
+                            android:src="@drawable/ic_manito_abajo_outline"
+                            android:background="@null"
+                            android:layout_alignTop="@+id/thumbsUp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginStart="19dp" />
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/thumbsUp"
+                            android:src="@drawable/ic_manito_arriba_outlinex2"
+                            android:background="@null"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/thumbsDown"
+                            android:layout_toEndOf="@+id/thumbsDown"
+                            android:layout_marginLeft="30dp"
+                            android:layout_marginStart="24dp" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

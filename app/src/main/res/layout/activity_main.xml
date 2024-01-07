@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout android:id="@+id/coordinatorLayout" android:layout_width="fill_parent" android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include layout="@layout/content_main" />
+    <com.google.android.material.appbar.AppBarLayout android:id="@+id/appBarLayout" android:layout_width="fill_parent" android:layout_height="wrap_content"
+        android:background="#FFF">
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="55.0dip"
+            android:background="#FFF">
+            <androidx.appcompat.widget.Toolbar android:id="@+id/toolbar" android:background="#FFF" android:layout_width="fill_parent" android:layout_height="?actionBarSize" />
+            <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+                <ImageView android:layout_width="0.0dip" android:layout_height="fill_parent" android:src="@drawable/mleft" android:scaleType="centerCrop" android:layout_weight="0.33" />
+                <ImageView android:layout_width="0.0dip" android:layout_height="fill_parent" android:src="@drawable/mlogo" android:layout_weight="0.33" />
+                <ImageView android:layout_width="0.0dip" android:layout_height="fill_parent" android:src="@drawable/mright" android:scaleType="centerCrop" android:layout_weight="0.33" />
+
+            </LinearLayout>
+        </RelativeLayout>
+        <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="70.0dip" app:layout_collapseMode="pin">
+            <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="0.5">
+
+                <FrameLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+                    <ImageButton android:id="@+id/playButton" android:background="@null" android:layout_width="40.0dip" android:layout_height="40.0dip" android:layout_marginLeft="5dip" android:src="@drawable/ic_play_arrow_60dp" android:scaleType="fitXY" />
+
+                    <com.emdiem.mix.Utils.GifMovieView android:layout_gravity="center_horizontal" android:id="@+id/gifMovieView" android:layout_width="fill_parent" android:layout_height="50.0dip" android:layout_marginLeft="30.0dip" android:layout_marginTop="10.0dip"
+                        android:layout_marginRight="25dp" />
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout android:background="@drawable/wall" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="5.0dip" android:layout_weight="0.4">
+                <TextView android:textColor="#ffffffff" android:ellipsize="marquee" android:layout_gravity="center_vertical" android:id="@+id/marquee" android:focusableInTouchMode="true" android:layout_width="fill_parent" android:layout_height="wrap_content" android:scrollHorizontally="true" android:singleLine="true" android:freezesText="true" android:marqueeRepeatLimit="marquee_forever" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

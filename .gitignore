@@ -1,0 +1,9 @@
+.gradle/*
+.idea/*
+.tmp/*
+caches/*
+app/build/*
+Gpu-Image/build/*
+ImageViewTouch/build/*
+PLAY.zip
+wrapper/*

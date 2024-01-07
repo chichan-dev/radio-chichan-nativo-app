@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.cardview.widget.CardView android:layout_gravity="center" android:id="@+id/card_view" android:layout_width="fill_parent" android:layout_height="200.0dip" android:layout_margin="4.0dip">
+        <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <RelativeLayout android:layout_width="fill_parent" android:layout_height="150.0dip">
+                <ImageView android:id="@+id/cover" android:layout_width="fill_parent" android:layout_height="250.0dip" android:scaleType="centerCrop" />
+                <LinearLayout android:orientation="horizontal" android:background="@drawable/gradient" android:layout_width="fill_parent" android:layout_height="90.0dip" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true" android:alpha="0.7" />
+                <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="90.0dip" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true">
+                    <LinearLayout android:layout_width="fill_parent" android:layout_height="0.0dip" android:layout_weight="0.6">
+                        <TextView android:textSize="30.0dip" android:textColor="#ffffffff" android:id="@+id/titleText" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="25.0dip" android:layout_marginTop="25.0dip" android:layout_marginRight="25.0dip" android:text="ContestTitle" android:singleLine="true" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="fill_parent" android:layout_height="0.0dip" android:layout_weight="0.2"
+                        android:layout_marginBottom="5dp">
+                        <TextView android:textColor="#ffffffff" android:id="@+id/dateText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="25.0dip" android:text="Subject"
+                            android:layout_marginRight="25dp"
+                            android:textStyle="italic" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:elevation="2dp"
+                    android:background="#ff1366b8">
+
+                    <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/imageView"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_concurso" />
+                </FrameLayout>
+
+            </RelativeLayout>
+            <LinearLayout android:orientation="horizontal" android:id="@+id/heartContainer" android:layout_width="fill_parent" android:layout_height="fill_parent">
+                <LinearLayout android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="0.01" />
+                <ImageButton android:id="@+id/heart" android:background="@null" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="0.1" android:src="@drawable/ic_favorite_outline_24dp"
+                    android:layout_marginLeft="10dp" />
+                <LinearLayout android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="0.8" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

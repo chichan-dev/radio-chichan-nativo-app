@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:focusable="false"
+    android:clickable="false"
+    android:descendantFocusability="blocksDescendants"
+    android:layout_height="match_parent">
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/answerContainer"
+        android:layout_height="50dp">
+
+
+        <ImageView
+            android:layout_width="400dp"
+            android:layout_height="50dp"
+            android:id="@+id/answerBackground"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/survey_box"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/answerButton"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@null"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="Test"
+            android:textColor="#FFF" />
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

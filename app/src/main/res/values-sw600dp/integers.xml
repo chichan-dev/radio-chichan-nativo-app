@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <integer name="sliding_space_layout_weight" tools:ignore="MissingDefaultResource">1</integer>
+    <integer name="sliding_card_layout_weight" tools:ignore="MissingDefaultResource">6</integer>
+</resources>

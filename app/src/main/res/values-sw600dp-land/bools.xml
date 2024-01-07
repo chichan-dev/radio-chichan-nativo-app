@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="padded_layout">true</bool>
+    <bool name="full_screen_with_header">false</bool>
+</resources>
