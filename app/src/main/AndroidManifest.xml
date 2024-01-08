@@ -29,6 +29,7 @@
     <uses-permission android:name="android.permission.BROADCAST_WAP_PUSH" />
     <uses-permission android:name="android.permission.BROADCAST_SMS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
 
     <permission
@@ -48,13 +49,13 @@
         android:supportsRtl="true"
         android:enableOnBackInvokedCallback="true"
         android:usesCleartextTraffic="true"
-        >
+    >
         <activity android:name="com.emdiem.mix.MainActivity.MemeSelectActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name="com.emdiem.mix.MainActivity.PhotoProcessActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="com.emdiem.mix.MainActivity.MyCameraActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name="com.emdiem.mix.Service.PlaybackService" />
 
@@ -121,8 +122,10 @@
         <receiver android:name="com.emdiem.mix.Helper.NotificationActionService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.exoplayer2.ui.PlayerNotificationManager.ACTION_PLAY" />
-                <action android:name="com.google.android.exoplayer2.ui.PlayerNotificationManager.ACTION_PAUSE" />
+                <action
+                    android:name="com.google.android.exoplayer2.ui.PlayerNotificationManager.ACTION_PLAY" />
+                <action
+                    android:name="com.google.android.exoplayer2.ui.PlayerNotificationManager.ACTION_PAUSE" />
             </intent-filter>
         </receiver>
 
@@ -151,7 +154,8 @@
                 <!-- IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
                 <category android:name="com.emdiem.Play" />
             </intent-filter>
-        </receiver> <!-- IMPORTANT: Change "YOUR_SENDER_ID" to your GCM Sender Id. -->
+        </receiver> <!--
+        IMPORTANT: Change "YOUR_SENDER_ID" to your GCM Sender Id. -->
         <meta-data
             android:name="com.parse.push.gcm_sender_id"
             android:value="id:112557741590" />

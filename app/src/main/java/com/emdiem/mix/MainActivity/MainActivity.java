@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -42,7 +43,6 @@ import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-
     private Context mContext;
     private GifMovieView mGifMovieView;
     private TextView mMarqueeText;
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int PERMISSION_REQUEST_CAMERA = 11;
     public static final int PERMISSION_REQUEST_STORAGE_READ = 12;
     public static final int PERMISSION_REQUEST_STORAGE_WRITE = 13;
+    public static final int PERMISSION_REQUEST_POST_NOTIFICATIONS = 99;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,15 +73,20 @@ public class MainActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        mRecyclerView = (RecyclerView)findViewById(R.id.recyclerView);
-        mGifMovieView = (GifMovieView)findViewById(R.id.gifMovieView);
-        mPlayButton = (ImageButton)findViewById(R.id.playButton);
-        mMarqueeText = (TextView)findViewById(R.id.marquee);
-        mFab = (FloatingActionButton)findViewById(R.id.fab);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mGifMovieView = (GifMovieView) findViewById(R.id.gifMovieView);
+        mPlayButton = (ImageButton) findViewById(R.id.playButton);
+        mMarqueeText = (TextView) findViewById(R.id.marquee);
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
 
         setup();
         load();
         listen();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissions(new String[] { Manifest.permission.POST_NOTIFICATIONS },
+                    PERMISSION_REQUEST_POST_NOTIFICATIONS);
+        }
     }
 
     public void setup() {
@@ -91,14 +97,12 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("handler", new Messenger(new PlaybackServiceHandler()));
         startService(intent);
 
-
         mGifMovieView.setMovieResource(R.drawable.eqx);
         mGifMovieView.setPaused(true);
 
         mPlayButton.setTag("s");
-//        requestCameraPermission();
+        // requestCameraPermission();
     }
-
 
     /**
      * Requests camera permission
@@ -106,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
      */
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
 
         switch (requestCode) {
             case PERMISSION_REQUEST_CAMERA: {
@@ -134,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 
-
                     Log.d("Permission", "WRITE PERMISSION GRANTED");
 
                 } else {
@@ -153,13 +156,28 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
 
-
                     Log.d("Permission", "READ PERMISSION GRANTED");
 
                 } else {
 
                     Log.d("Permission", "READ PERMISSION DENIED");
                     mFab.setVisibility(View.INVISIBLE);
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                }
+                return;
+            }
+            case PERMISSION_REQUEST_POST_NOTIFICATIONS: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Log.d("Permission", "NOTIFICATION PERMISSION GRANTED");
+
+                } else {
+
+                    Log.d("Permission", "NOTIFICATION PERMISSION DENIED");
+                    //mFab.setVisibility(View.INVISIBLE);
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
 
@@ -183,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                     mPlayButton.setTag("s");
                     mGifMovieView.setPaused(true);
                     mPlayButton.setImageResource(R.drawable.ic_play_arrow_60dp);
-                }else{
+                } else {
                     mIntent.setAction("play");
                     mIntent.putExtra("stationId", 0);
                     mPlayButton.setTag("p");
@@ -196,19 +214,18 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-//        mFab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                Intent mIntent = new Intent(MainActivity.this, MyCameraActivity.class);
-//                startActivity(mIntent);
-//
-//            }
-//        });
+        // mFab.setOnClickListener(new View.OnClickListener() {
+        // @Override
+        // public void onClick(View view) {
+        //
+        // Intent mIntent = new Intent(MainActivity.this, MyCameraActivity.class);
+        // startActivity(mIntent);
+        //
+        // }
+        // });
     }
 
-    public void load()
-    {
+    public void load() {
         ParseQuery<ParseObject> mParseQuery = new ParseQuery<>("Marquee");
         mParseQuery.whereEqualTo("active", true);
 
@@ -219,9 +236,9 @@ public class MainActivity extends AppCompatActivity {
         mParseQuery.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject parseobject, ParseException parseexception) {
-                if(parseexception == null) {
+                if (parseexception == null) {
                     System.out.println("ParseObject: " + parseobject);
-                    if(parseobject != null) {
+                    if (parseobject != null) {
                         System.out.println("Text: " + parseobject.getString("text"));
                         mMarqueeText.setText(parseobject.getString("text"));
                         mMarqueeText.setSelected(true);
@@ -251,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, 1, false));
                 mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0);
 
-//                mRecyclerView.setAdapter(mPostRecyclerAdapter);
+                // mRecyclerView.setAdapter(mPostRecyclerAdapter);
 
                 AlphaInAnimationAdapter mAlphaAdapter = new AlphaInAnimationAdapter(mPostRecyclerAdapter, 0f);
                 mAlphaAdapter.setFirstOnly(false);
@@ -261,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
 
                 mRecyclerView.setAdapter(mScaleAnimationAdapter);
 
-//                mRecyclerView.setAdapter(mPostRecyclerAdapter);
+                // mRecyclerView.setAdapter(mPostRecyclerAdapter);
                 mPostRecyclerAdapter.notifyDataSetChanged();
                 mRecyclerView.setHasFixedSize(true);
                 mRecyclerView.setItemViewCacheSize(20);
@@ -269,12 +286,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void setPlayButtonStatus(boolean p){
-        if(p) {
+    public void setPlayButtonStatus(boolean p) {
+        if (p) {
             mPlayButton.setImageResource(R.drawable.ic_stop_blue_24dp);
             mGifMovieView.setPaused(false);
             mPlayButton.setTag("p");
-        }else {
+        } else {
             mPlayButton.setImageResource(R.drawable.ic_play_arrow_60dp);
             mGifMovieView.setPaused(true);
             mPlayButton.setTag("s");
@@ -298,17 +315,15 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private static class PlaybackServiceHandler extends Handler
-    {
+    private static class PlaybackServiceHandler extends Handler {
 
-        public void handleMessage(Message message)
-        {
+        public void handleMessage(Message message) {
             Bundle mData = message.getData();
 
             Boolean justPlaying = mData.getBoolean("justPlaying");
             Boolean isPlaying = mData.getBoolean("playing");
 
-            if(mActivity != null){
+            if (mActivity != null) {
                 // Activity is running
                 mActivity.isPlaying = isPlaying;
                 mActivity.setPlayButtonStatus(justPlaying || isPlaying);

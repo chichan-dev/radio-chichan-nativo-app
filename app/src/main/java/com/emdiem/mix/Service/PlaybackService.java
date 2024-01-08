@@ -95,7 +95,7 @@ public class PlaybackService extends Service {
 
                 if (state == TelephonyManager.CALL_STATE_RINGING)
                     stop();
-                else if(state == TelephonyManager.CALL_STATE_OFFHOOK)
+                else if (state == TelephonyManager.CALL_STATE_OFFHOOK)
                     stop();
 
                 super.onCallStateChanged(state, incomingNumber);
@@ -103,7 +103,7 @@ public class PlaybackService extends Service {
         };
         mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 
-        if(mgr != null)
+        if (mgr != null)
             mgr.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
         return null;
@@ -113,34 +113,37 @@ public class PlaybackService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        mAudioManager = (AudioManager)getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
             public void onAudioFocusChange(int focusChange) {
                 if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
                     // Pause playback mAudioManager.abandonAudioFocus(mAudioFocusListener);
                     stop();
-                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(
+                            Context.NOTIFICATION_SERVICE);
                     notificationManager.cancel(1);
                     justStopped = true;
-                } /**else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-                 // Resume playback
-                 } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-                 // Stop playback
-                 mAudioManager.abandonAudioFocus(mAudioFocusListener);
-                 stop();
-                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                 notificationManager.cancel(1);
-                 justStopped = true;
-                 }**/
+                } /**
+                   * else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+                   * // Resume playback
+                   * } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+                   * // Stop playback
+                   * mAudioManager.abandonAudioFocus(mAudioFocusListener);
+                   * stop();
+                   * NotificationManager notificationManager = (NotificationManager)
+                   * getSystemService(Context.NOTIFICATION_SERVICE);
+                   * notificationManager.cancel(1);
+                   * justStopped = true;
+                   * }
+                   **/
             }
         };
-
 
         exoPlayer = ExoPlayerFactory.newSimpleInstance(
                 new DefaultRenderersFactory(this),
                 new DefaultTrackSelector(), new DefaultLoadControl());
 
-        exoPlayer.addListener(new ExoPlayer.EventListener(){
+        exoPlayer.addListener(new ExoPlayer.EventListener() {
 
             @Override
             public void onTimelineChanged(Timeline timeline, @Nullable Object manifest, int reason) {
@@ -159,7 +162,7 @@ public class PlaybackService extends Service {
 
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                if(!exoPlayer.getPlayWhenReady() && playbackState == ExoPlayer.STATE_READY) {
+                if (!exoPlayer.getPlayWhenReady() && playbackState == ExoPlayer.STATE_READY) {
                     exoPlayer.setPlayWhenReady(true);
                     Toast.makeText(getApplicationContext(), "Conectado", Toast.LENGTH_LONG).show();
 
@@ -199,8 +202,8 @@ public class PlaybackService extends Service {
 
     }
 
-    public void stop(){
-        if(exoPlayer != null && exoPlayer.getPlayWhenReady()){
+    public void stop() {
+        if (exoPlayer != null && exoPlayer.getPlayWhenReady()) {
             exoPlayer.stop();
             justStopped = true;
         }
@@ -214,16 +217,35 @@ public class PlaybackService extends Service {
     }
 
     private MediaSource buildMediaSource(Uri uri) {
-        return  new ExtractorMediaSource(uri,
+        return new ExtractorMediaSource(uri,
                 new DefaultHttpDataSourceFactory("ua"),
                 new DefaultExtractorsFactory(), null, null);
     }
 
     public int onStartCommand(Intent intent, final int flags, int startId) {
-        if(intent == null || intent.getAction() == null )
+        if (intent == null || intent.getAction() == null)
             return 0;
 
-        if(intent.getAction().equals("play")) {
+        if (intent.getAction().equals("play_notification")) {
+            AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
+                @Override
+                public void run() {
+                    if (isRunning)
+                        return;
+                    isRunning = true;
+
+                    startForeground(FOREGROUND_SERVICE_ID, getNotification("PLAY Radio"));
+                    initializeMediaPlayer(
+                            "https://playerservices.streamtheworld.com/api/livestream-redirect/PLAY_PANAMAAAC.aac?dist=lakyPanaWeb?dist=PlayPanaWeb");
+                    isRunning = false;
+                    shareState(true);
+
+                    Log.d("Service Log", "I'm here");
+                }
+            });
+        }
+
+        if (intent.getAction().equals("play")) {
             Bundle extras = intent.getExtras();
             if (extras != null) {
                 if (extras.get("handler") != null) // Attach handler
@@ -235,28 +257,29 @@ public class PlaybackService extends Service {
                 mStationId = intent.getIntExtra("stationId", 0);
             }
 
-                AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (isRunning)
-                            return;
-                        isRunning = true;
+            AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
+                @Override
+                public void run() {
+                    if (isRunning)
+                        return;
+                    isRunning = true;
 
-                        startForeground(FOREGROUND_SERVICE_ID, getNotification("PLAY Radio"));
-                        initializeMediaPlayer("https://playerservices.streamtheworld.com/api/livestream-redirect/PLAY_PANAMAAAC.aac?dist=lakyPanaWeb?dist=PlayPanaWeb");
-                        isRunning = false;
-                        shareState(true);
+                    startForeground(FOREGROUND_SERVICE_ID, getNotification("PLAY Radio"));
+                    initializeMediaPlayer(
+                            "https://playerservices.streamtheworld.com/api/livestream-redirect/PLAY_PANAMAAAC.aac?dist=lakyPanaWeb?dist=PlayPanaWeb");
+                    isRunning = false;
+                    shareState(true);
 
-                        Log.d("Service Log", "I'm here");
-                    }
-                });
+                    Log.d("Service Log", "I'm here");
+                }
+            });
         }
 
-        if(intent.getAction().equals("play-track")){
+        if (intent.getAction().equals("play-track")) {
             Bundle extras = intent.getExtras();
 
-            if(intent.getExtras().get("handler") != null) // Attach handler
-                mMessenger = (Messenger)intent.getExtras().get("handler");
+            if (intent.getExtras().get("handler") != null) // Attach handler
+                mMessenger = (Messenger) intent.getExtras().get("handler");
 
             justStopped = false;
 
@@ -264,13 +287,13 @@ public class PlaybackService extends Service {
                 @Override
                 public void run() {
                     try {
-                        if(mSongUrl == intent.getExtras().getString("track")) {
+                        if (mSongUrl == intent.getExtras().getString("track")) {
                             stop();
                             return;
                         }
                         mSongUrl = intent.getExtras().getString("track");
                         System.out.println("Track: " + mSongUrl);
-                        if(mSongUrl != null) {
+                        if (mSongUrl != null) {
                             if (isRunning)
                                 return;
 
@@ -278,41 +301,45 @@ public class PlaybackService extends Service {
 
                                 isRunning = true;
                                 exoPlayer.seekTo(0);
-                                DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getApplicationContext(), Util.getUserAgent(getApplicationContext(), "yourApplicationName"));
-                                //MediaSource videoSource = new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(mSongUrl));
-                                //exoPlayer.prepare(videoSource);
+                                DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
+                                        getApplicationContext(),
+                                        Util.getUserAgent(getApplicationContext(), "yourApplicationName"));
+                                // MediaSource videoSource = new
+                                // ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(mSongUrl));
+                                // exoPlayer.prepare(videoSource);
                                 exoPlayer.setPlayWhenReady(true);
                                 startForeground(FOREGROUND_SERVICE_ID, getNotification("Play"));
 
-                            }catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
 
                             }
                         }
                         /*
-                        exoPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                            @Override
-                            public void onCompletion(MediaPlayer mediaPlayer) {
-
-                                Bundle mData = new Bundle();
-                                mData.putBoolean("finished", true);
-                                mData.putString("track", mSongUrl);
-
-                                Message mMessage = new Message();
-                                mMessage.setData(mData);
-
-                                try {
-
-                                    if (mMessenger != null)
-                                        mMessenger.send(mMessage);
-
-                                } catch (RemoteException exception) {
-
-                                }
-
-                            }
-                        });
-*/
-                    }catch (Exception exception2){
+                         * exoPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                         * 
+                         * @Override
+                         * public void onCompletion(MediaPlayer mediaPlayer) {
+                         * 
+                         * Bundle mData = new Bundle();
+                         * mData.putBoolean("finished", true);
+                         * mData.putString("track", mSongUrl);
+                         * 
+                         * Message mMessage = new Message();
+                         * mMessage.setData(mData);
+                         * 
+                         * try {
+                         * 
+                         * if (mMessenger != null)
+                         * mMessenger.send(mMessage);
+                         * 
+                         * } catch (RemoteException exception) {
+                         * 
+                         * }
+                         * 
+                         * }
+                         * });
+                         */
+                    } catch (Exception exception2) {
 
                     }
 
@@ -323,55 +350,61 @@ public class PlaybackService extends Service {
             });
         }
 
-        if(intent.getAction().equals("pause")) {
+        if (intent.getAction().equals("pause")) {
             exoPlayer.setPlayWhenReady(false);
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(
+                    Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(1);
             justStopped = true;
         }
 
-        if(intent.getAction().equals("stop")) {
+        if (intent.getAction().equals("stop")) {
             exoPlayer.stop();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(
+                    Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(1);
             justStopped = true;
         }
 
-        if(intent.getAction().equals("force-stop")) {
+        if (intent.getAction().equals("force-stop")) {
             this.forceStop();
         }
 
-        if(intent.getAction().equals("start") && !isRunning) {
+        if (intent.getAction().equals("start") && !isRunning) {
             exoPlayer.setPlayWhenReady(true);
         }
 
-        if(intent.getAction().equals("get-progress")){
+        if (intent.getAction().equals("get-progress")) {
             broadcastTrackProgress();
         }
 
-        if(intent.getAction().equals("attach")) {
+        if (intent.getAction().equals("attach")) {
             mMessenger = (Messenger) intent.getExtras().get("handler");
 
-            /**SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
-            int stationId = sharedPreferences.getInt("stationId", 100);
-
-            Bundle mData = new Bundle();
-
-            mData.putBoolean("playing", false);
-            mData.putInt("stationId", stationId);
-            mData.putBoolean("running", false);
-            mData.putBoolean("justPlaying", false);
-
-            Message mMessage = new Message();
-            mMessage.setData(mData);
-
-            try {
-                if (mMessenger != null) {
-                    mMessenger.send(mMessage);
-                }
-            } catch (RemoteException exception) {
-                Log.d("Exception", "RemoteException thrown");
-            }**/
+            /**
+             * SharedPreferences sharedPreferences =
+             * getApplicationContext().getSharedPreferences("preferences",
+             * Context.MODE_PRIVATE);
+             * int stationId = sharedPreferences.getInt("stationId", 100);
+             * 
+             * Bundle mData = new Bundle();
+             * 
+             * mData.putBoolean("playing", false);
+             * mData.putInt("stationId", stationId);
+             * mData.putBoolean("running", false);
+             * mData.putBoolean("justPlaying", false);
+             * 
+             * Message mMessage = new Message();
+             * mMessage.setData(mData);
+             * 
+             * try {
+             * if (mMessenger != null) {
+             * mMessenger.send(mMessage);
+             * }
+             * } catch (RemoteException exception) {
+             * Log.d("Exception", "RemoteException thrown");
+             * }
+             **/
 
             shareState(false);
 
@@ -384,11 +417,11 @@ public class PlaybackService extends Service {
         return 1;
     }
 
-    public void forceStop(){
+    public void forceStop() {
         stopForeground(true);
         stopSelf();
 
-        if(exoPlayer != null && exoPlayer.getPlayWhenReady()){
+        if (exoPlayer != null && exoPlayer.getPlayWhenReady()) {
             exoPlayer.stop();
 
             Bundle mData = new Bundle();
@@ -398,7 +431,6 @@ public class PlaybackService extends Service {
 
             Message mMessage = new Message();
             mMessage.setData(mData);
-
 
             justStopped = true;
 
@@ -413,16 +445,17 @@ public class PlaybackService extends Service {
         }
     }
 
-    public void broadcastTrackProgress(){
+    public void broadcastTrackProgress() {
 
         Bundle mData = new Bundle();
 
-        if(mSongUrl != null && exoPlayer.getPlayWhenReady() && !mSongUrl.equals("")) {
+        if (mSongUrl != null && exoPlayer.getPlayWhenReady() && !mSongUrl.equals("")) {
 
             Log.d("Current", exoPlayer.getCurrentPosition() + "ms");
             Log.d("Current", exoPlayer.getDuration() + "ms");
 
-            mData.putInt("progress", (int) Math.round((((double) exoPlayer.getCurrentPosition() / (double) exoPlayer.getDuration()) * 100)));
+            mData.putInt("progress", (int) Math
+                    .round((((double) exoPlayer.getCurrentPosition() / (double) exoPlayer.getDuration()) * 100)));
 
         }
 
@@ -430,23 +463,22 @@ public class PlaybackService extends Service {
         mMessage.setData(mData);
 
         try {
-            if(mMessenger != null) {
+            if (mMessenger != null) {
                 mMessenger.send(mMessage);
             }
-        }catch (RemoteException exception){
+        } catch (RemoteException exception) {
             Log.d("Exception", exception.getLocalizedMessage());
         }
 
-
     }
 
-    public void shareState(Boolean justPlaying){
+    public void shareState(Boolean justPlaying) {
         // Share the state of the player
         Bundle mData = new Bundle();
 
         try {
             mData.putBoolean("playing", exoPlayer.getPlayWhenReady());
-        }catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             mData.putBoolean("playing", false);
         }
 
@@ -455,11 +487,15 @@ public class PlaybackService extends Service {
         mData.putBoolean("justPlaying", justPlaying);
         mData.putBoolean("just-stopped", justStopped);
 
-        /**if(mPlayer != null)
-            mData.putBoolean("playing", mPlayer.isPlaying());**/
+        /**
+         * if(mPlayer != null)
+         * mData.putBoolean("playing", mPlayer.isPlaying());
+         **/
 
-        /**if (mTrack != null)
-            mData.putString("track", mTrack.getRawData().toString());**/
+        /**
+         * if (mTrack != null)
+         * mData.putString("track", mTrack.getRawData().toString());
+         **/
 
         Message mMessage = new Message();
         mMessage.setData(mData);
@@ -473,7 +509,7 @@ public class PlaybackService extends Service {
         }
     }
 
-    public Notification getNotification(String songName){
+    public Notification getNotification(String songName) {
         String channel;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             channel = createChannel();
@@ -488,49 +524,50 @@ public class PlaybackService extends Service {
         Intent mIntent = new Intent(getApplicationContext(), PlaybackService.class);
         mIntent.setAction("force-stop");
 
-        @SuppressLint("WrongConstant") PendingIntent pendingIntent = PendingIntent.getService(
+        @SuppressLint("WrongConstant")
+        PendingIntent pendingIntent = PendingIntent.getService(
                 getApplicationContext(),
                 0,
                 mIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-        );
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         notificationView.setOnClickPendingIntent(R.id.stop, pendingIntent);
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
-        @SuppressLint("WrongConstant") PendingIntent pendingNotificationIntent = PendingIntent.getActivity(
+        @SuppressLint("WrongConstant")
+        PendingIntent pendingNotificationIntent = PendingIntent.getActivity(
                 this,
                 0,
                 notificationIntent,
-                PendingIntent.FLAG_IMMUTABLE
-        );
+                PendingIntent.FLAG_IMMUTABLE);
 
-
-//        Intent intentPlay = new Intent(this, PlaybackService.class)
-//                .setAction(ACTION_PLAY);
-//        @SuppressLint("WrongConstant") PendingIntent pendingIntentPlay = PendingIntent.getBroadcast(this, 0,
-//                intentPlay, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-//
-//        Intent intentPause = new Intent(this, PlaybackService.class)
-//                .setAction(ACTION_PAUSE);
-//        @SuppressLint("WrongConstant") PendingIntent pendingIntentPause = PendingIntent.getBroadcast(this, 0,
-//                intentPause, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        // Intent intentPlay = new Intent(this, PlaybackService.class)
+        // .setAction(ACTION_PLAY);
+        // @SuppressLint("WrongConstant") PendingIntent pendingIntentPlay =
+        // PendingIntent.getBroadcast(this, 0,
+        // intentPlay, PendingIntent.FLAG_UPDATE_CURRENT |
+        // PendingIntent.FLAG_IMMUTABLE);
+        //
+        // Intent intentPause = new Intent(this, PlaybackService.class)
+        // .setAction(ACTION_PAUSE);
+        // @SuppressLint("WrongConstant") PendingIntent pendingIntentPause =
+        // PendingIntent.getBroadcast(this, 0,
+        // intentPause, PendingIntent.FLAG_UPDATE_CURRENT |
+        // PendingIntent.FLAG_IMMUTABLE);
 
         Intent intentPlay = new Intent(this, PlaybackService.class)
-                .setAction("play");
+                .setAction("play_notification");
 
         // Añade datos al Intent
         intentPlay.putExtra("handler", mMessenger);
         intentPlay.putExtra("stationId", mStationId);
 
         PendingIntent pendingIntentPlay = PendingIntent.getService(this, 0,
-                intentPlay, PendingIntent.FLAG_UPDATE_CURRENT);
+                intentPlay, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         Intent intentPause = new Intent(this, PlaybackService.class)
                 .setAction("stop");
         PendingIntent pendingIntentPause = PendingIntent.getService(this, 0,
-                intentPause, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
+                intentPause, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         mBuilder.setContentTitle("Playback Service")
                 .setContentText(songName)
@@ -538,8 +575,8 @@ public class PlaybackService extends Service {
                 .setContentIntent(pendingNotificationIntent)
                 .setOngoing(true);
 
-
-        // Configurar el estilo de la notificación para mostrar las acciones en la vista compacta
+        // Configurar el estilo de la notificación para mostrar las acciones en la vista
+        // compacta
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -547,12 +584,9 @@ public class PlaybackService extends Service {
 
                 mBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
                         .setShowActionsInCompactView(0, 1, 2)
-                        .setMediaSession(mediaSessionCompat.getSessionToken())
-                );
+                        .setMediaSession(mediaSessionCompat.getSessionToken()));
             }
         });
-
-
 
         // Agregar las acciones a la notificación
         mBuilder.addAction(R.drawable.ic_play_arrow_24dp, "Play", pendingIntentPlay);
@@ -565,17 +599,34 @@ public class PlaybackService extends Service {
         return notification;
     }
 
-    @NonNull
     @TargetApi(26)
     private synchronized String createChannel() {
-        NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT < 26) {
+            return "MyChannel";
+        }
+        NotificationManager mNotificationManager = (NotificationManager) this
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (!mNotificationManager.areNotificationsEnabled()) {
+            // Las notificaciones están desactivadas. Abrir la configuración de
+            // notificaciones.
+            Intent intent = new Intent();
+            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+
+            // para Android 5-7
+            intent.putExtra("app_package", getPackageName());
+            intent.putExtra("app_uid", getApplicationInfo().uid);
+
+            // para Android 8 y superiores
+            intent.putExtra("android.provider.extra.APP_PACKAGE", getPackageName());
+
+            startActivity(intent);
+        }
 
         String name = "MyChannel";
         int importance = NotificationManager.IMPORTANCE_LOW;
-
         NotificationChannel mChannel = new NotificationChannel("MyChannel", name, importance);
-
-        mChannel.enableLights(true);
+        mChannel.enableLights(false);
         mChannel.setLightColor(Color.BLUE);
         if (mNotificationManager != null) {
             mNotificationManager.createNotificationChannel(mChannel);
@@ -588,8 +639,7 @@ public class PlaybackService extends Service {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
 
-
-        if(mgr != null) {
+        if (mgr != null) {
             mgr.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
         }
     }
@@ -620,11 +670,12 @@ public class PlaybackService extends Service {
     private class getXML extends AsyncTask<Object, Object, Void> {
         @Override
         protected Void doInBackground(Object... params) {
-                initializeMediaPlayer("https://playerservices.streamtheworld.com/api/livestream-redirect/PLAY_PANAMAAAC.aac?dist=lakyPanaWeb?dist=PlayPanaWeb");
-                isRunning = false;
-                shareState(true);
+            initializeMediaPlayer(
+                    "https://playerservices.streamtheworld.com/api/livestream-redirect/PLAY_PANAMAAAC.aac?dist=lakyPanaWeb?dist=PlayPanaWeb");
+            isRunning = false;
+            shareState(true);
 
-                Log.d("Service Log", "I'm here");
+            Log.d("Service Log", "I'm here");
             return null;
         }
     }
